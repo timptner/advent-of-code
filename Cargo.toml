@@ -10,3 +10,6 @@ clap = { version = "4.0", features = ["derive"] }
 
 [[bin]]
 name = "1501"
+
+[[bin]]
+name = "1502"
