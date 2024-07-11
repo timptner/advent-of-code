@@ -1,15 +1,19 @@
 // Year 2015 Day 6
 // Probably a Fire Hazard
 
-use std::fs::{read_to_string, File};
-use std::io::Write;
+use std::fs::read_to_string;
 
 const SIZE: usize = 1_000;
 
 fn main() {
     let input = read_to_string("./data/2015/06.txt").expect("input file should be readable");
-    let mut matrix = Matrix::new();
-    for (index, line) in input.lines().enumerate() {
+    part1(&input);
+    part2(&input);
+}
+
+fn part1(input: &str) {
+    let mut matrix = Matrix::new(1);
+    for line in input.lines() {
         if line.starts_with("turn on") {
             let rectangle = parse_line(line, "turn on ");
             matrix.switch(rectangle, "turn_on");
@@ -22,11 +26,27 @@ fn main() {
         } else {
             panic!("unexpected line content: {}", line);
         }
-        // if index % 25 == 0 {
-        //     matrix.plot(&format!("step{:03}.txt", index + 1));
-        // }
     }
-    println!("{}", matrix.count());
+    println!("Part 1: {}", matrix.count());
+}
+
+fn part2(input: &str) {
+    let mut matrix = Matrix::new(2);
+    for line in input.lines() {
+        if line.starts_with("turn on") {
+            let rectangle = parse_line(line, "turn on ");
+            matrix.switch(rectangle, "turn_on");
+        } else if line.starts_with("turn off") {
+            let rectangle = parse_line(line, "turn off ");
+            matrix.switch(rectangle, "turn_off");
+        } else if line.starts_with("toggle") {
+            let rectangle = parse_line(line, "toggle ");
+            matrix.switch(rectangle, "toggle");
+        } else {
+            panic!("unexpected line content: {}", line);
+        }
+    }
+    println!("Part 2: {}", matrix.count());
 }
 
 fn parse_line(line: &str, prefix: &str) -> Rectangle {
@@ -63,34 +83,63 @@ impl Rectangle {
 }
 
 struct Matrix {
-    data: Vec<Vec<bool>>,
+    data: Vec<Vec<u16>>,
+    version: u8,
 }
 
 impl Matrix {
-    fn new() -> Matrix {
+    fn new(version: u8) -> Matrix {
         Matrix {
-            data: vec![vec![false; SIZE]; SIZE],
+            data: vec![vec![0; SIZE]; SIZE],
+            version,
         }
     }
 
-    fn get(&self, point: &Point) -> bool {
+    fn get(&self, point: &Point) -> u16 {
         self.data[point.x][point.y]
     }
 
-    fn set(&mut self, point: &Point, value: bool) {
+    fn set(&mut self, point: &Point, value: u16) {
         self.data[point.x][point.y] = value;
     }
 
     fn turn_on(&mut self, point: &Point) {
-        self.set(point, true);
+        match self.version {
+            1 => self.set(point, 1),
+            2 => {
+                let value = self.get(point);
+                self.set(point, value + 1);
+            }
+            _ => panic!("unsupported version"),
+        }
     }
 
     fn turn_off(&mut self, point: &Point) {
-        self.set(point, false);
+        match self.version {
+            1 => self.set(point, 0),
+            2 => {
+                let value = self.get(point);
+                if value > 0 {
+                    self.set(point, value - 1);
+                }
+            }
+            _ => panic!("unsupported version"),
+        }
     }
 
     fn toggle(&mut self, point: &Point) {
-        self.set(point, !self.get(point));
+        match self.version {
+            1 => match self.get(point) {
+                0 => self.set(point, 1),
+                1 => self.set(point, 0),
+                _ => panic!("unexpected number"),
+            },
+            2 => {
+                let value = self.get(point);
+                self.set(point, value + 2);
+            }
+            _ => panic!("unsupported version"),
+        }
     }
 
     fn switch(&mut self, rectangle: Rectangle, action: &str) {
@@ -112,28 +161,9 @@ impl Matrix {
         for x in 0..SIZE {
             for y in 0..SIZE {
                 let point = Point { x, y };
-                match self.get(&point) {
-                    true => counter += 1,
-                    false => {}
-                }
+                counter += self.get(&point) as u32;
             }
         }
         counter
-    }
-
-    fn plot(&self, name: &str) {
-        let path = String::from("./output/") + name;
-        let mut file = File::create(path).unwrap();
-        for x in 0..SIZE {
-            for y in 0..SIZE {
-                let point = Point { x, y };
-                let value = match self.get(&point) {
-                    true => '*',
-                    false => ' ',
-                };
-                write!(&mut file, "{value}").unwrap();
-            }
-            writeln!(&mut file, "").unwrap();
-        }
     }
 }
