@@ -1,4 +1,5 @@
 // Year 2015 Day 2
+// I Was Told There Would Be No Math
 
 use std::{fs::read_to_string, vec};
 
@@ -26,7 +27,11 @@ fn calc_area(length: i32, width: i32, height: i32) -> i32 {
     let y = length * height;
     let z = length * width;
 
-    let slack = vec![x, y, z].iter().min().expect("empty iterator").to_owned();
+    let slack = vec![x, y, z]
+        .iter()
+        .min()
+        .expect("empty iterator")
+        .to_owned();
     let area = 2 * (x + y + z);
 
     area + slack
