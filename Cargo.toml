@@ -1,5 +1,5 @@
 [package]
-name = "advent-of-code-rust"
+name = "advent-of-code"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,24 +8,3 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
 md5 = "0.7.0"
-
-[[bin]]
-name = "1501"
-
-[[bin]]
-name = "1502"
-
-[[bin]]
-name = "1503"
-
-[[bin]]
-name = "1504"
-
-[[bin]]
-name = "1505"
-
-[[bin]]
-name = "1506"
-
-[[bin]]
-name = "1507"
