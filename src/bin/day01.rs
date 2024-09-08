@@ -6,12 +6,11 @@ use advent_of_code::{
 
 use std::process::exit;
 
-const YEAR: u16 = 2015;
 const DAY: u8 = 1;
 const TITLE: &str = "Not Quite Lisp";
 
 fn main() {
-    print_header(YEAR, DAY, TITLE);
+    print_header(DAY, TITLE);
 
     let input = match get_input(DAY) {
         Ok(result) => result,

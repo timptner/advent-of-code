@@ -3,8 +3,8 @@ use std::io::Error;
 
 pub mod days;
 
-pub fn print_header(year: u16, day: u8, title: &str) {
-	println!("Year {year}, Day {day} - {title}");
+pub fn print_header(day: u8, title: &str) {
+	println!("Year 2015, Day {day} - {title}");
 }
 
 pub fn get_input(day: u8) -> Result<String, Error> {
