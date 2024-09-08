@@ -19,7 +19,6 @@ fn main() {
             exit(1);
         },
     };
-    let input = input.trim();
     
     let result = part1(&input);
     println!("Floor: {}", result);

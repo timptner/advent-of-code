@@ -20,8 +20,6 @@ fn main() {
         },
     };
 
-    let input = input.trim();
-
     let result = part1(&input);
     println!("Visited houses: {}", result);
 
