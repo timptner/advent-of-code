@@ -9,6 +9,6 @@ pub fn print_header(day: u8, title: &str) {
 
 pub fn get_input(day: u8) -> Result<String, Error> {
 	let path = format!("./data/day{day:02}.txt");
-	let text = read_to_string(path)?;
+	let text = read_to_string(path)?.trim().to_owned();
 	Ok(text)
 }
