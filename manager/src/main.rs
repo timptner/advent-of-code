@@ -51,7 +51,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     match args.command {
         Commands::Input {year, day} => {
             let puzzle = Puzzle::new(year, day);
-            let _content = puzzle.get_input(client)?;
+            let path = puzzle.get_input_path()?;
+            if !path.exists() {
+                puzzle.get_input(client)?;
+            }
+            println!("{}", path.to_str().unwrap());
         },
     };
     Ok(())
