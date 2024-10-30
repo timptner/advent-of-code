@@ -7,23 +7,23 @@ use std::{
     io::Error as IOError,
     path::PathBuf,
 };
+use validator::{Validate, ValidationErrors};
 
+#[derive(Validate)]
 pub struct Puzzle {
+    #[validate(range(min = 2015, max = 2024))]
     year: u16,
+    #[validate(range(min = 1, max = 25))]
     day: u8,
 }
 
 impl Puzzle {
-    pub fn new(year: u16, day: u8) -> Puzzle {
-        if year < 2015 || year > 2024 {
-            panic!("year must be 2015..=2024");
+    pub fn new(year: u16, day: u8) -> Result<Puzzle, ValidationErrors> {
+        let puzzle = Puzzle { year, day };
+        match puzzle.validate() {
+            Ok(_) => Ok(puzzle),
+            Err(error) => Err(error),
         }
-
-        if day < 1 || day > 25 {
-            panic!("day must be 1..=25");
-        }
-
-        Puzzle { year, day }
     }
 
     pub fn get_input(&self, client: Client) -> Result<String, Box<dyn Error>> {

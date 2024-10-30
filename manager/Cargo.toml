@@ -9,3 +9,4 @@ dotenv = { version = "0.15.0" }
 env_logger = { version = "0.11.5" }
 log = { version = "0.4.22", features = ["kv", "kv_std"] }
 reqwest = { version = "0.12.8", features = ["blocking"] }
+validator = { version = "0.18.1", features = ["derive"]  }

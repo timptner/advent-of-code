@@ -2,7 +2,7 @@ mod models;
 
 use clap::{Parser, Subcommand};
 use dotenv;
-use log::warn;
+use log::{debug, error, warn};
 use models::Puzzle;
 use reqwest::{
     blocking::Client,
@@ -11,17 +11,20 @@ use reqwest::{
 use std::{env, error::Error, process::exit};
 
 /// A CLI for interacting with the puzzle platform
-#[derive(Parser, Debug)]
+#[derive(Parser)]
 #[command(version)]
 struct Args {
     #[command(subcommand)]
     command: Commands,
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand)]
 enum Commands {
+    /// Retrieve input from platform
     Input {
+        /// Year of puzzle
         year: u16,
+        /// Day of puzzle
         day: u8,
     }
 }
@@ -39,7 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let token = match env::var("SESSION_TOKEN") {
         Ok(value) => value,
         Err(_) => {
-            println!("failed to get SESSION_TOKEN");
+            error!("failed to get SESSION_TOKEN");
             exit(1);
         }
     };
@@ -50,7 +53,16 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     match args.command {
         Commands::Input {year, day} => {
-            let puzzle = Puzzle::new(year, day);
+            let puzzle = match Puzzle::new(year, day) {
+                Ok(puzzle) => puzzle,
+                Err(validation) => {
+                    for (field, errors) in validation.field_errors()  {
+                        error!("validation failed for {field}");
+                        debug!("{:#?}", errors)
+                    }
+                    exit(1);
+                }
+            };
             let path = puzzle.get_input_path()?;
             if !path.exists() {
                 puzzle.get_input(client)?;
