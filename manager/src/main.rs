@@ -3,11 +3,12 @@ mod models;
 use clap::{Parser, Subcommand};
 use dotenv;
 use log::{debug, error, warn};
-use models::Puzzle;
+use models::{Answer, Puzzle};
 use reqwest::{
     blocking::Client,
     header::{HeaderMap, HeaderValue},
 };
+use validator::ValidationErrors;
 use std::{env, error::Error, process::exit};
 
 /// A CLI for interacting with the puzzle platform
@@ -26,6 +27,17 @@ enum Commands {
         year: u16,
         /// Day of puzzle
         day: u8,
+    },
+    /// Send answer to platform
+    Answer {
+        /// Year of puzzle
+        year: u16,
+        /// Day of puzzle
+        day: u8,
+        /// Level of puzzle
+        level: u8,
+        /// Answer to submit
+        answer: String,
     }
 }
 
@@ -53,24 +65,41 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     match args.command {
         Commands::Input {year, day} => {
-            let puzzle = match Puzzle::new(year, day) {
-                Ok(puzzle) => puzzle,
+            let puzzle = create_puzzle(year, day);
+            puzzle.get_input(client)?;
+        },
+        Commands::Answer { year, day, level, answer } => {
+            let puzzle = create_puzzle(year, day);
+            let answer = match Answer::new(level, answer) {
+                Ok(answer) => answer,
                 Err(validation) => {
-                    for (field, errors) in validation.field_errors()  {
-                        error!("validation failed for {field}");
-                        debug!("{:#?}", errors)
-                    }
+                    log_validation_errors(validation);
                     exit(1);
                 }
             };
-            let path = puzzle.get_input_path()?;
-            if !path.exists() {
-                puzzle.get_input(client)?;
-            }
-            println!("{}", path.to_str().unwrap());
-        },
+            let contents = puzzle.submit_answer(client, answer)?;
+            println!("{contents}");
+        }
     };
     Ok(())
+}
+
+fn create_puzzle(year: u16, day: u8) -> Puzzle {
+    let puzzle = match Puzzle::new(year, day) {
+        Ok(puzzle) => puzzle,
+        Err(validation) => {
+            log_validation_errors(validation);
+            exit(1);
+        }
+    };
+    puzzle
+}
+
+fn log_validation_errors(validation: ValidationErrors) {
+    for (field, errors) in validation.field_errors()  {
+        error!("validation failed for {field}");
+        debug!("{:#?}", errors);
+    }
 }
 
 fn prepare_client(token: &str) -> Client {
