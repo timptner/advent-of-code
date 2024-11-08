@@ -11,7 +11,5 @@ So simply extract your session token from a browser of your choice and set it as
 ## Usage
 
 ```shell
-cargo run --bin <puzzle>
+cargo run -p <package> -- <day>
 ```
-
-The `puzzle` name always consists of the year and day: e.g. `1501` (Year 2015, Day 1).

@@ -1,8 +1,7 @@
 [workspace]
-
 resolver = "2"
-
 members = [
-    "year2015",
     "manager",
+    "year2015",
+    "year2023",
 ]
