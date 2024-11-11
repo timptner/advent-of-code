@@ -14,10 +14,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let content = year2023::get_input(day)?;
+    
     let answer = match day {
         1 => year2023::day01::part1(&content)?,
         _ => panic!("unsupported day"),
     };
-    println!("{answer}");
+    println!("Part 1: {answer}");
+
+    let answer = match day {
+        1 => year2023::day01::part2(&content)?,
+        _ => panic!("unsupported day"),
+    };
+    println!("Part 2: {answer}");
+
     Ok(())
 }
