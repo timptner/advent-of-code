@@ -18,6 +18,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
 
 [[package]]
+name = "advent-of-code"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "csv",
+ "dotenv",
+ "env_logger",
+ "log",
+ "md5",
+ "reqwest",
+ "scraper",
+ "serde",
+ "validator",
+]
+
+[[package]]
 name = "ahash"
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -786,21 +802,6 @@ name = "mac"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c41e0c4fef86961ac6d6f8a82609f55f31b05e4fce149ac5710e439df7619ba4"
-
-[[package]]
-name = "manager"
-version = "0.1.0"
-dependencies = [
- "clap",
- "csv",
- "dotenv",
- "env_logger",
- "log",
- "reqwest",
- "scraper",
- "serde",
- "validator",
-]
 
 [[package]]
 name = "markup5ever"
@@ -2116,20 +2117,6 @@ name = "windows_x86_64_msvc"
 version = "0.52.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
-
-[[package]]
-name = "year2015"
-version = "0.1.0"
-dependencies = [
- "md5",
-]
-
-[[package]]
-name = "year2023"
-version = "0.1.0"
-dependencies = [
- "manager",
-]
 
 [[package]]
 name = "zerocopy"
