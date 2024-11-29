@@ -42,6 +42,7 @@ pub fn load_input(year: u16, day: u8) {
     };
 }
 
+
 pub fn submit_answer(year: u16, day: u8, level: u8, answer: String) {
     let client = prepare_client();
 
