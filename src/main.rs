@@ -83,15 +83,20 @@ pub fn solve_puzzle(year: u16, day: u8) {
                 use advent_of_code::year2023::day01;
                 println!("Part 1: {:?}", day01::part1(&content));
                 println!("Part 2: {:?}", day01::part2(&content));
-            }
+            },
             _ => panic!("unexpected day"),
         },
-        2024 => match arguments.day {
+        2024 => match day {
             1 => {
                 use advent_of_code::year2024::day01;
                 println!("Part 1: {:?}", day01::part1(&content));
                 println!("Part 2: {:?}", day01::part2(&content));
-            }
+            },
+            2 => {
+                use advent_of_code::year2024::day02;
+                println!("Part 1: {:?}", day02::part1(&content));
+                println!("Part 2: {:?}", day02::part2(&content));
+            },
             _ => panic!("unexpected day"),
         },
         _ => panic!("unexpected year"),
