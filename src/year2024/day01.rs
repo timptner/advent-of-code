@@ -4,7 +4,6 @@ pub fn part1(content: &str) -> Result<u32, String> {
     for index in 0..set1.len() {
         let a = set1[index];
         let b = set2[index];
-        println!("{a} {b}");
         let distance: u32;
         if b > a {
             distance = b - a;
