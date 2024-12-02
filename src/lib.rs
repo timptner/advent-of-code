@@ -1,6 +1,7 @@
 pub mod commands;
 mod models;
 pub mod year2023;
+pub mod year2024;
 
 use std::fs::read_to_string;
 
