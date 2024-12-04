@@ -42,8 +42,7 @@ enum Commands {
 
 fn main() {
     env_logger::init();
-    dotenv::dotenv();
-
+    let _ = dotenv::dotenv();
     let args = Arguments::parse();
 
     match args.command {
