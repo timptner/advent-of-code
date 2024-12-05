@@ -106,6 +106,11 @@ pub fn solve_puzzle(year: u16, day: u8) {
                 println!("Part 1: {:?}", day04::part1(&content));
                 println!("Part 2: {:?}", day04::part2(&content));
             },
+            5 => {
+                use advent_of_code::year2024::day05;
+                println!("Part 1: {:?}", day05::part1(&content));
+                println!("Part 2: {:?}", day05::part2(&content));
+            },
             _ => panic!("unexpected day"),
         },
         _ => panic!("unexpected year"),
