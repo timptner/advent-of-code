@@ -48,7 +48,7 @@ fn main() {
     match args.command {
         Commands::Input { year, day } => {
             commands::load_input(year, day);
-        },
+        }
         Commands::Solve { year, day } => {
             if !(2015..=2024).contains(&year) {
                 error!("year must be number between 2015 and 2023");
@@ -61,7 +61,7 @@ fn main() {
             }
 
             solve_puzzle(year, day);
-        },
+        }
         Commands::Answer {
             year,
             day,
@@ -69,7 +69,7 @@ fn main() {
             answer,
         } => {
             commands::submit_answer(year, day, level, answer);
-        },
+        }
     };
 }
 
@@ -82,7 +82,7 @@ pub fn solve_puzzle(year: u16, day: u8) {
                 use advent_of_code::year2023::day01;
                 println!("Part 1: {:?}", day01::part1(&content));
                 println!("Part 2: {:?}", day01::part2(&content));
-            },
+            }
             _ => panic!("unexpected day"),
         },
         2024 => match day {
@@ -90,27 +90,32 @@ pub fn solve_puzzle(year: u16, day: u8) {
                 use advent_of_code::year2024::day01;
                 println!("Part 1: {:?}", day01::part1(&content));
                 println!("Part 2: {:?}", day01::part2(&content));
-            },
+            }
             2 => {
                 use advent_of_code::year2024::day02;
                 println!("Part 1: {:?}", day02::part1(&content));
                 println!("Part 2: {:?}", day02::part2(&content));
-            },
+            }
             3 => {
                 use advent_of_code::year2024::day03;
                 println!("Part 1: {:?}", day03::part1(&content));
                 println!("Part 2: {:?}", day03::part2(&content));
-            },
+            }
             4 => {
                 use advent_of_code::year2024::day04;
                 println!("Part 1: {:?}", day04::part1(&content));
                 println!("Part 2: {:?}", day04::part2(&content));
-            },
+            }
             5 => {
                 use advent_of_code::year2024::day05;
                 println!("Part 1: {:?}", day05::part1(&content));
                 println!("Part 2: {:?}", day05::part2(&content));
-            },
+            }
+            6 => {
+                use advent_of_code::year2024::day06;
+                println!("Part 1: {:?}", day06::part1(&content));
+                println!("Part 2: {:?}", day06::part2(&content));
+            }
             _ => panic!("unexpected day"),
         },
         _ => panic!("unexpected year"),
