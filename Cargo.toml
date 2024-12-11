@@ -16,3 +16,7 @@ reqwest = { version = "0.12.8", features = ["blocking"] }
 scraper = "0.21.0"
 serde = { version = "1.0.214", features = ["derive"] }
 validator = { version = "0.18.1", features = ["derive"] }
+
+[[bin]]
+name = "cargo-generate-day"
+path = "src/bin/generate_day.rs"

@@ -12,6 +12,12 @@ Set the value of your session cookie as env var `SESSION_TOKEN`.
 
 ## Usage
 
+Generate empty template for a new day.
+
+```shell
+cargo run --bin cargo-generate-day -- <year> <day>
+```
+
 Retrieve personal input.
 
 ```shell
