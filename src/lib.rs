@@ -1,4 +1,5 @@
 pub mod commands;
+pub mod grid;
 pub mod year2023;
 pub mod year2024;
 

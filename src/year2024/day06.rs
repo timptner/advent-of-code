@@ -1,12 +1,15 @@
 use std::collections::HashSet;
+use crate::grid::Grid;
 
 pub fn part1(content: &str) -> Result<u32, String> {
     let mut grid = Grid::new(content);
-    let (row, column) = grid.position('^').unwrap();
-    grid.set(row, column, '.').unwrap();
-    let mut guard = Guard::new(row, column, Orientation::North);
+    let position = grid.position('^').unwrap();
+    grid.set(position.row, position.column, '.').unwrap();
+
+    let mut guard = Guard::new(position.row, position.column, Orientation::North);
     let mut visited_positions = HashSet::new();
-    visited_positions.insert((row, column));
+    visited_positions.insert((position.row, position.column));
+    
     loop {
         let (row, column) = guard.next_field();
         let next_value = match grid.get(row, column) {
@@ -27,13 +30,17 @@ pub fn part1(content: &str) -> Result<u32, String> {
 // 1681 - to high
 pub fn part2(content: &str) -> Result<u32, String> {
     let mut grid = Grid::new(content);
-    let (row, column) = grid.position('^').unwrap();
-    grid.set(row, column, '.').unwrap();
+    let position = grid.position('^').unwrap();
+    grid.set(position.row, position.column, '.').unwrap();
+
     let orientation = Orientation::North;
-    let mut guard = Guard::new(row, column, orientation);
+    let mut guard = Guard::new(position.row, position.column, orientation);
+
     let mut visited_positions = HashSet::new();
     visited_positions.insert((guard.row, guard.column, guard.orientation));
+    
     let mut blocking_positions = HashSet::new();
+    
     loop {
         let (row, column) = guard.next_field();
         let next_value = match grid.get(row, column) {
@@ -59,7 +66,7 @@ pub fn part2(content: &str) -> Result<u32, String> {
         }
         visited_positions.insert((guard.row, guard.column, guard.orientation));
     }
-    blocking_positions.remove(&(row, column));
+    blocking_positions.remove(&(position.row, position.column));
     Ok(blocking_positions.len() as u32)
 }
 
@@ -89,73 +96,6 @@ fn projection_is_cycle(
         if !is_new {
             return true;
         }
-    }
-}
-
-#[derive(Clone, Debug)]
-struct Grid {
-    data: Vec<char>,
-    rows: i32,
-    columns: i32,
-}
-
-impl Grid {
-    fn new(content: &str) -> Self {
-        let data: Vec<_> = content
-            .lines()
-            .map(|line| line.chars().collect::<Vec<char>>())
-            .collect();
-        let rows = data.len() as i32;
-        let columns = data[0].len() as i32;
-        let data: Vec<char> = data.into_iter().flatten().collect();
-        Self {
-            data,
-            rows,
-            columns,
-        }
-    }
-
-    fn get_index(&self, row: i32, column: i32) -> Result<usize, &'static str> {
-        if !(0..self.rows).contains(&row) {
-            return Err("row is off grid");
-        }
-        if !(0..self.columns).contains(&column) {
-            return Err("column is off grid");
-        }
-        let index = (self.columns * row + column) as usize;
-        if !(0..self.data.len()).contains(&index) {
-            return Err("data does not contain calculated index");
-        }
-        Ok(index)
-    }
-
-    fn get(&self, row: i32, column: i32) -> Option<char> {
-        let index = match self.get_index(row, column) {
-            Ok(index) => index,
-            Err(_) => return None,
-        };
-        Some(self.data[index])
-    }
-
-    fn set(&mut self, row: i32, column: i32, value: char) -> Result<(), &str> {
-        let index = match self.get_index(row, column) {
-            Ok(index) => index,
-            Err(_) => return Err("can't set value off grid"),
-        };
-        self.data[index] = value;
-        Ok(())
-    }
-
-    fn position(&self, value: char) -> Option<(i32, i32)> {
-        let (row, column) = match self.data.iter().position(|&x| x == value) {
-            Some(index) => {
-                let row = index as i32 / self.columns;
-                let column = index as i32 % self.columns;
-                (row, column)
-            }
-            None => return None,
-        };
-        Some((row, column))
     }
 }
 
